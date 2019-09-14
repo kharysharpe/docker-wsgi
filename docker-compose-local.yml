@@ -1,0 +1,49 @@
+version: '2'
+services:
+  web:
+    ports:
+      - '8080:8080'
+      - '8443:8443'
+  postgres:
+    ports:
+      - '5432:5432'
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: always
+    environment:
+      ADMINER_DESIGN: 'pepa-linha'
+      ADMINER_PLUGINS: 'enum-types enum-option edit-calendar tables-filter dump-json'
+    ports:
+      - 8765:8080
+    networks:
+      - webapp-network
+  mailhog:
+    container_name: mailhog
+    image: mailhog/mailhog
+    restart: always
+    ports:
+      - 1025:1025
+      - 8025:8025
+    networks:
+      - webapp-network
+  browser:
+    container_name: browser
+    build: ./docker/browser
+    restart: always
+    environment:
+      VNC_NO_PASSWORD: 1
+    ports:
+      - 4444:4444
+      - 5900:5900
+    networks:
+      - webapp-network
+  ide:
+    container_name: ide
+    build: ./docker/ide
+    restart: always
+    ports:
+      - 4444:4444
+      - 5900:5900
+    networks:
+      - webapp-network

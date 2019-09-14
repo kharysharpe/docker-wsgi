@@ -1,0 +1,44 @@
+version: '2'
+
+services:
+  web:
+    container_name: web
+    build:
+      context: ./docker/nginx
+      args:
+        BUILD_ENV: PRODUCTION
+    restart: always
+    environment:
+      NGINX_PORT: 8080
+      NGINX_HOST: 'localhost'
+    ports:
+      - '80:8080'
+      - '443:8443'
+    volumes:
+      - ./webapp:/webapp
+    networks:
+      - webapp-network
+  python:
+    container_name: python
+    build: ./docker/python
+    restart: always
+    volumes:
+      - ./webapp:/webapp
+    networks:
+      - webapp-network
+  postgres:
+    container_name: postgres
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+      #      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-P@$$W0rd}
+      POSTGRES_DB: webapp
+    build: ./docker/postgres
+    restart: always
+    volumes:
+      - ./storage/postgresql:/var/lib/postgresql/data
+    networks:
+      - webapp-network
+
+networks:
+  webapp-network:
+    driver: bridge
