@@ -35,7 +35,7 @@ services:
     build: ./docker/postgres
     restart: always
     volumes:
-      - ./storage/postgresql:/var/lib/postgresql/data
+      - ./volumes/postgresql:/var/lib/postgresql/data
     networks:
       - webapp-network
 
