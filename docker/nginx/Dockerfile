@@ -1,4 +1,4 @@
-FROM nginx:1.13
+FROM nginx:1.17.3
 LABEL maintainer="Khary Sharpe <ksharpe@email.com>"
 
 RUN DEBIAN_FRONTEND="noninteractive" apt-get clean && apt-get update
